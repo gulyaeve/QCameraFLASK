@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication
 
 from views import UI_Window
 from models import Camera
+from web_server import WebServer
 
 if __name__ == '__main__':
 
