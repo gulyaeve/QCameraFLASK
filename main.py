@@ -9,6 +9,9 @@ if __name__ == '__main__':
 
     camera = Camera(0)
 
+    webserver = WebServer(camera)
+    webserver.start()
+
     app = QApplication([])
     start_window = UI_Window(camera)
     start_window.show()
