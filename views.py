@@ -12,8 +12,8 @@ class UI_Window(QWidget):
         self.camera = camera
         # print('UI')
         # Create a timer.
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.nextFrameSlot)
+        # self.timer = QTimer()
+        # self.timer.timeout.connect(self.nextFrameSlot)
 
         # Create a layout.
         layout = QVBoxLayout()
@@ -50,7 +50,7 @@ class UI_Window(QWidget):
             msgBox.exec_()
             return
 
-        self.timer.start(1000. / 24)
+        # self.timer.start(1000. / 24)
 
     def nextFrameSlot(self):
         frame = self.camera.read()

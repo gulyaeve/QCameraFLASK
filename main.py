@@ -12,8 +12,9 @@ logging.basicConfig(handlers=(logging.FileHandler('logs/log.txt'), logging.Strea
                     )
 
 if __name__ == '__main__':
-
+    # TODO: сделать выбор камеры
     camera = Camera(0)
+    # camera = Camera(1)
 
     webserver = WebServer(camera)
     webserver.start()
