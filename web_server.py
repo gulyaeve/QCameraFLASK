@@ -11,7 +11,7 @@ class WebServer(QThread):
 
     def run(self):
         print("webserver started")
-        self.app.run(host="0.0.0.0", debug=False)
+        self.app.run(host="0.0.0.0")
 
     def stream(self):
         return Response(next(self.camera), mimetype='multipart/x-mixed-replace; boundary=frame')

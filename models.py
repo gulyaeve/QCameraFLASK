@@ -14,9 +14,9 @@ class Camera:
         # self.width = width
         # self.height = height
         # self.fps = fps
-        # self.vc.set(1, fps)  #set FPS
-        # self.vc.set(3, width)  # set width
-        # self.vc.set(4, height)  # set height
+        self.vc.set(1, fps)  #set FPS
+        self.vc.set(3, width)  # set width
+        self.vc.set(4, height)  # set height
 
         return self.vc.isOpened()
 
