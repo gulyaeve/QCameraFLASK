@@ -36,10 +36,12 @@ class Camera:
                 frame = cv2.bitwise_not(frame)
             return frame
 
-    def gen_frames(self):
+    def __next__(self):
         if self.open():
-            ret, frame = self.vc.read()
-            if ret:
-                ret, buffer = cv2.imencode(".jpg", frame)
-                yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+            while True:
+                ret, frame = self.vc.read()
+                if ret:
+                    ret, buffer = cv2.imencode(".jpg", frame)
+                    yield (b'--frame\r\n'
+                           b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+

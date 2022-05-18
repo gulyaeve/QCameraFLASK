@@ -1,6 +1,6 @@
 
-from PyQt5.QtCore import QThread, QTimer
-from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QApplication, QHBoxLayout, QMessageBox
+from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox
 from PyQt5.QtGui import QPixmap, QImage
 
 
@@ -58,18 +58,3 @@ class UI_Window(QWidget):
             image = QImage(frame, frame.shape[1], frame.shape[0], QImage.Format_RGB888)
             pixmap = QPixmap.fromImage(image)
             self.label.setPixmap(pixmap)
-
-
-class MovieThread(QThread):
-    def __init__(self, camera):
-        super().__init__()
-        self.camera = camera
-
-    def run(self):
-        self.camera.acquire_movie(200)
-
-
-# if __name__ == '__main__':
-#     app = QApplication([])
-#     window = UI_Window()
-#     window.show()
