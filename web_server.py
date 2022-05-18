@@ -1,3 +1,5 @@
+from logging import log, INFO
+
 from PyQt5.QtCore import QThread
 from flask import Flask, Response
 
@@ -10,7 +12,7 @@ class WebServer(QThread):
         self.app.add_url_rule('/', endpoint=None, view_func=self.stream)
 
     def run(self):
-        print("webserver started")
+        log(INFO, "webserver started")
         self.app.run(host="0.0.0.0")
 
     def stream(self):

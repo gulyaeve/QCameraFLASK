@@ -1,3 +1,4 @@
+from logging import log, INFO
 
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox
@@ -43,7 +44,7 @@ class UI_Window(QWidget):
 
     def start(self):
         if not self.camera.open():
-            print('failure')
+            log(INFO, "Failed camera")
             msgBox = QMessageBox()
             msgBox.setText("Failed to open camera.")
             msgBox.exec_()
