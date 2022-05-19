@@ -23,3 +23,4 @@ if __name__ == '__main__':
     start_window = UI_Window(camera)
     start_window.show()
     app.exit(app.exec_())
+    print('Hello')
