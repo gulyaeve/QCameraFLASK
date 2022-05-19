@@ -1,15 +1,17 @@
 from logging import log, INFO
 
 from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox
+from PyQt5.QtMultimedia import QCameraInfo
+from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox, QComboBox
 from PyQt5.QtGui import QPixmap, QImage
+
+from models import Camera
 
 
 class UI_Window(QWidget):
 
-    def __init__(self, camera=None):
+    def __init__(self):
         super().__init__()
-        self.camera = camera
         # print('UI')
         # Create a timer.
         # self.timer = QTimer()
@@ -24,6 +26,16 @@ class UI_Window(QWidget):
         btnCamera = QPushButton("Open camera")
         btnCamera.clicked.connect(self.start)
         button_layout.addWidget(btnCamera)
+
+        self.cameras = []
+        for i in QCameraInfo.availableCameras():
+            self.cameras.append(i.description())
+
+        camerasCombo = QComboBox()
+        camerasCombo.addItems(self.cameras)
+        camerasCombo.activated[str].connect(self.onCameraSelect)
+        button_layout.addWidget(camerasCombo)
+
         layout.addLayout(button_layout)
 
         # btnCamera2 = QPushButton("Stream")
@@ -41,6 +53,10 @@ class UI_Window(QWidget):
         self.setLayout(layout)
         self.setWindowTitle("First GUI with QT")
         # self.setFixedSize(800, 800)
+        self.cameraindx = 0
+
+    def selectedCamera(self):
+        return self.cameraindx
 
     def start(self):
         if not self.camera.open():
@@ -59,3 +75,6 @@ class UI_Window(QWidget):
             image = QImage(frame, frame.shape[1], frame.shape[0], QImage.Format_RGB888)
             pixmap = QPixmap.fromImage(image)
             self.label.setPixmap(pixmap)
+
+    def onCameraSelect(self, text):
+        self.cameraindx = self.cameras.index(text)
