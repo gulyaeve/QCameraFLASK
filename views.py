@@ -1,11 +1,15 @@
 from logging import log, INFO
 
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, QObject
 from PyQt5.QtMultimedia import QCameraInfo
 from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox, QComboBox
 from PyQt5.QtGui import QPixmap, QImage
 
+# from main import Controller
+from Controller import Controller
+# from main import controller
 from models import Camera
+# from web_server import ServerController
 
 
 class UI_Window(QWidget):
@@ -16,7 +20,6 @@ class UI_Window(QWidget):
         # Create a timer.
         self.timer = QTimer()
         self.timer.timeout.connect(self.nextFrameSlot)
-
 
         # Create a layout.
         layout = QVBoxLayout()
@@ -40,9 +43,9 @@ class UI_Window(QWidget):
 
         layout.addLayout(button_layout)
 
-        # btnCamera2 = QPushButton("Stream")
-        # btnCamera2.clicked.connect(self.stream2)
-        # button_layout.addWidget(btnCamera2)
+        self.btnCamera2 = QPushButton("Stream")
+        # self.btnCamera2.clicked.connect(self.startStream)
+        layout.addWidget(self.btnCamera2)
         # layout.addLayout(button_layout)
 
         # Add a label
@@ -58,6 +61,8 @@ class UI_Window(QWidget):
         self.cameraindx = 0
         self.camera = Camera(self.cameraindx)
         self.start()
+        self.controller = Controller()
+        self.webserver = self.controller.runserver(self.camera)
 
     def selectedCamera(self):
         return self.cameraindx
@@ -68,7 +73,10 @@ class UI_Window(QWidget):
             msgBox = QMessageBox()
             msgBox.setText("Failed to open camera.")
             msgBox.exec_()
+            self.btnCamera2.setDisabled(True)
             return
+        else:
+            self.btnCamera2.setEnabled(True)
 
         self.timer.start(1000. / 24)
 
@@ -81,6 +89,12 @@ class UI_Window(QWidget):
             self.label.setPixmap(pixmap)
 
     def onCameraSelect(self, text):
+        self.controller.stopstream()
         self.cameraindx = self.cameras.index(text)
         self.camera = Camera(self.cameraindx)
+        # self.webserver = ServerController(self.camera)
         self.start()
+
+    def startStream(self):
+        self.webserver = self.controller.runserver(self.camera)
+        self.webserver.start()
