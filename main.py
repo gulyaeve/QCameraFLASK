@@ -12,18 +12,12 @@ logging.basicConfig(handlers=(logging.FileHandler('logs/log.txt'), logging.Strea
                     )
 
 if __name__ == '__main__':
-    # TODO: сделать выбор камеры
-    # camera = Camera(0)
-    # camera = Camera(1)
-
-
-
     app = QApplication([])
     start_window = UI_Window()
-    selectedCamera = start_window.selectedCamera()
-    camera = Camera(selectedCamera)
-    webserver = WebServer(camera)
-    webserver.start()
+    # selectedCamera = start_window.selectedCamera()
+    # camera = Camera(selectedCamera)
+    # webserver = WebServer(camera)
+    # webserver.start()
     start_window.show()
     app.exit(app.exec_())
 

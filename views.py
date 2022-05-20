@@ -14,8 +14,9 @@ class UI_Window(QWidget):
         super().__init__()
         # print('UI')
         # Create a timer.
-        # self.timer = QTimer()
-        # self.timer.timeout.connect(self.nextFrameSlot)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.nextFrameSlot)
+
 
         # Create a layout.
         layout = QVBoxLayout()
@@ -23,9 +24,9 @@ class UI_Window(QWidget):
         # Add a button
         button_layout = QHBoxLayout()
 
-        btnCamera = QPushButton("Open camera")
-        btnCamera.clicked.connect(self.start)
-        button_layout.addWidget(btnCamera)
+        # btnCamera = QPushButton("Open camera")
+        # btnCamera.clicked.connect(self.start)
+        # button_layout.addWidget(btnCamera)
 
         self.cameras = []
         for i in QCameraInfo.availableCameras():
@@ -34,6 +35,7 @@ class UI_Window(QWidget):
         camerasCombo = QComboBox()
         camerasCombo.addItems(self.cameras)
         camerasCombo.activated[str].connect(self.onCameraSelect)
+        # camerasCombo.activated[str].connect(self.start)
         button_layout.addWidget(camerasCombo)
 
         layout.addLayout(button_layout)
@@ -54,6 +56,8 @@ class UI_Window(QWidget):
         self.setWindowTitle("First GUI with QT")
         # self.setFixedSize(800, 800)
         self.cameraindx = 0
+        self.camera = Camera(self.cameraindx)
+        self.start()
 
     def selectedCamera(self):
         return self.cameraindx
@@ -66,7 +70,7 @@ class UI_Window(QWidget):
             msgBox.exec_()
             return
 
-        # self.timer.start(1000. / 24)
+        self.timer.start(1000. / 24)
 
     def nextFrameSlot(self):
         frame = self.camera.read()
@@ -78,3 +82,5 @@ class UI_Window(QWidget):
 
     def onCameraSelect(self, text):
         self.cameraindx = self.cameras.index(text)
+        self.camera = Camera(self.cameraindx)
+        self.start()
