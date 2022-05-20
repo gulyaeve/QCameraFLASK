@@ -1,15 +1,12 @@
 from logging import log, INFO
 
-from PyQt5.QtCore import QTimer, QObject
+from PyQt5.QtCore import QTimer, QObject, QThread
 from PyQt5.QtMultimedia import QCameraInfo
 from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox, QComboBox
 from PyQt5.QtGui import QPixmap, QImage
 
-# from main import Controller
-from Controller import Controller
-# from main import controller
 from models import Camera
-# from web_server import ServerController
+from web_server import WebServer
 
 
 class UI_Window(QWidget):
@@ -18,14 +15,15 @@ class UI_Window(QWidget):
         super().__init__()
         # print('UI')
         # Create a timer.
+        # self.thread = QThread()
         self.timer = QTimer()
         self.timer.timeout.connect(self.nextFrameSlot)
 
         # Create a layout.
-        layout = QVBoxLayout()
+        self.layout = QVBoxLayout()
 
         # Add a button
-        button_layout = QHBoxLayout()
+        self.button_layout = QHBoxLayout()
 
         # btnCamera = QPushButton("Open camera")
         # btnCamera.clicked.connect(self.start)
@@ -35,34 +33,38 @@ class UI_Window(QWidget):
         for i in QCameraInfo.availableCameras():
             self.cameras.append(i.description())
 
-        camerasCombo = QComboBox()
-        camerasCombo.addItems(self.cameras)
-        camerasCombo.activated[str].connect(self.onCameraSelect)
-        # camerasCombo.activated[str].connect(self.start)
-        button_layout.addWidget(camerasCombo)
+        self.camerasCombo = QComboBox()
+        self.camerasCombo.addItems(self.cameras)
+        self.camerasCombo.activated[str].connect(self.onCameraSelect)
+        self.camerasCombo.activated[str].connect(self.start)
+        self.button_layout.addWidget(self.camerasCombo)
 
-        layout.addLayout(button_layout)
+        self.layout.addLayout(self.button_layout)
 
         self.btnCamera2 = QPushButton("Stream")
-        # self.btnCamera2.clicked.connect(self.startStream)
-        layout.addWidget(self.btnCamera2)
+        self.btnCamera2.clicked.connect(self.startStream)
+        self.layout.addWidget(self.btnCamera2)
         # layout.addLayout(button_layout)
+
+        self.label1 = QLabel()
+        self.label1.setText('')
+        self.label1.setOpenExternalLinks(True)
+        self.layout.addWidget(self.label1)
 
         # Add a label
         self.label = QLabel()
         self.label.setFixedSize(640, 640)
 
-        layout.addWidget(self.label)
+        self.layout.addWidget(self.label)
 
         # Set the layout
-        self.setLayout(layout)
-        self.setWindowTitle("First GUI with QT")
+        self.setLayout(self.layout)
+        self.setWindowTitle("NotVLC")
         # self.setFixedSize(800, 800)
         self.cameraindx = 0
         self.camera = Camera(self.cameraindx)
         self.start()
-        self.controller = Controller()
-        self.webserver = self.controller.runserver(self.camera)
+        # self.webserver = self.controller.runserver(self.camera)
 
     def selectedCamera(self):
         return self.cameraindx
@@ -70,9 +72,9 @@ class UI_Window(QWidget):
     def start(self):
         if not self.camera.open():
             log(INFO, "Failed camera")
-            msgBox = QMessageBox()
-            msgBox.setText("Failed to open camera.")
-            msgBox.exec_()
+            self.msgBox = QMessageBox()
+            self.msgBox.setText("Failed to open camera.")
+            self.msgBox.exec_()
             self.btnCamera2.setDisabled(True)
             return
         else:
@@ -89,12 +91,18 @@ class UI_Window(QWidget):
             self.label.setPixmap(pixmap)
 
     def onCameraSelect(self, text):
-        self.controller.stopstream()
+        # self.controller.stopstream()
         self.cameraindx = self.cameras.index(text)
         self.camera = Camera(self.cameraindx)
-        # self.webserver = ServerController(self.camera)
+        # self.webserver = WebServer(self.camera)
         self.start()
 
     def startStream(self):
-        self.webserver = self.controller.runserver(self.camera)
+        self.webserver = WebServer(self.camera)
+        self.label1.setText(f'<a href="{self.webserver.getinfo()}">{self.webserver.getinfo()}</a>')
         self.webserver.start()
+        self.camerasCombo.setDisabled(True)
+        self.btnCamera2.setDisabled(True)
+
+        # self.webserver = self.controller.runserver(self.camera)
+        # self.webserver.start()
