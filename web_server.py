@@ -9,6 +9,7 @@ class WebServer(QThread):
     def __init__(self, camera):
         super().__init__()
         self.camera = camera
+
         self.app = Flask(__name__)
         self.app.add_url_rule('/', endpoint=None, view_func=self.stream)
 

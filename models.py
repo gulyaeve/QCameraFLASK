@@ -1,3 +1,5 @@
+from logging import log, INFO
+
 import cv2
 import imutils as imutils
 
@@ -20,6 +22,14 @@ class Camera:
                     frame = cv2.bitwise_not(frame)
                 return frame
 
+    def getheight(self):
+        if self.open():
+            ret, frame = self.vc.read()
+            frame = imutils.resize(frame, width=640)
+            frame_height = frame.shape[0]
+            log(INFO, f"Frame height {frame_height}")
+            return frame_height
+
     # def read_gray(self, negative=False):
     #     rval, frame = self.vc.read()
     #     if frame is not None:
@@ -33,6 +43,7 @@ class Camera:
         if self.open():
             while True:
                 ret, frame = self.vc.read()
+                frame = imutils.resize(frame, width=640)
                 if ret:
                     ret, buffer = cv2.imencode(".jpg", frame)
                     yield (b'--frame\r\n'

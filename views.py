@@ -35,27 +35,26 @@ class UI_Window(QWidget):
 
         self.layout.addLayout(self.button_layout)
 
-        self.btnCamera2 = QPushButton("Stream")
-        self.btnCamera2.clicked.connect(self.startStream)
-        self.layout.addWidget(self.btnCamera2)
+        self.streambutton = QPushButton("Stream")
+        self.streambutton.clicked.connect(self.startStream)
+        self.layout.addWidget(self.streambutton)
 
-        self.label1 = QLabel()
-        self.label1.setText('')
-        self.label1.setOpenExternalLinks(True)
-        self.layout.addWidget(self.label1)
+        self.streamlink = QLabel()
+        self.streamlink.setText('')
+        self.streamlink.setOpenExternalLinks(True)
+        self.layout.addWidget(self.streamlink)
 
         # Add a label
-        self.label = QLabel()
-        self.label.setFixedSize(640, 640)
-
-        self.layout.addWidget(self.label)
+        self.cameraview = QLabel()
+        self.layout.addWidget(self.cameraview)
 
         # Set the layout
         self.setLayout(self.layout)
-        self.setWindowTitle("NotVLC")
+        self.setWindowTitle("NotVLC -- BETA")
         # self.setFixedSize(800, 800)
         self.cameraindx = 0
         self.camera = Camera(self.cameraindx)
+        self.cameraheight = int(self.camera.getheight())
         self.start()
 
     def selectedCamera(self):
@@ -64,13 +63,13 @@ class UI_Window(QWidget):
     def start(self):
         if not self.camera.open():
             log(INFO, "Failed camera")
-            self.msgBox = QMessageBox()
-            self.msgBox.setText("Failed to open camera.")
-            self.msgBox.exec_()
-            self.btnCamera2.setDisabled(True)
+            msgBox = QMessageBox()
+            msgBox.setText("Failed to open camera.")
+            msgBox.exec_()
+            self.streambutton.setDisabled(True)
             return
         else:
-            self.btnCamera2.setEnabled(True)
+            self.streambutton.setEnabled(True)
 
         self.timer.start(60)
 
@@ -79,16 +78,21 @@ class UI_Window(QWidget):
         if frame is not None:
             image = QImage(frame, frame.shape[1], frame.shape[0], QImage.Format_RGB888)
             pixmap = QPixmap.fromImage(image)
-            self.label.setPixmap(pixmap)
+            self.cameraview.setPixmap(pixmap)
 
     def onCameraSelect(self, text):
         self.cameraindx = self.cameras.index(text)
         self.camera = Camera(self.cameraindx)
+        self.cameraheight = self.camera.getheight()
+        self.cameraview.setFixedSize(640, int(self.cameraheight))
         self.start()
 
     def startStream(self):
-        self.webserver = WebServer(self.camera)
-        self.label1.setText(f'<a href="{self.webserver.getinfo()}">{self.webserver.getinfo()}</a>')
-        self.webserver.start()
+        self.timer.stop()
+        self.cameraview.clear()
+        self.cameraview.setFixedSize(640, int(self.cameraheight))
+        webserver = WebServer(self.camera)
+        self.streamlink.setText(f'Адрес трансляции: <a href="{webserver.getinfo()}">{webserver.getinfo()}</a>')
+        webserver.start()
         self.camerasCombo.setDisabled(True)
-        self.btnCamera2.setDisabled(True)
+        self.streambutton.setDisabled(True)
