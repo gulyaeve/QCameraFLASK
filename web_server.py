@@ -13,7 +13,8 @@ class WebServer(QThread):
         self.app = Flask(__name__)
         self.app.add_url_rule('/', endpoint=None, view_func=self.stream)
 
-        self.ip = socket.gethostbyname(socket.gethostname())
+        hostname = socket.gethostname()
+        self.ip = socket.gethostbyname(hostname)
         self.port = 8899
 
     def run(self):
@@ -25,4 +26,3 @@ class WebServer(QThread):
 
     def stream(self):
         return Response(next(self.camera), mimetype='multipart/x-mixed-replace; boundary=frame')
-
