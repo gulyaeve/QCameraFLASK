@@ -1,6 +1,6 @@
 from logging import log, INFO
 
-from PyQt5.QtCore import QTimer, QObject, QThread
+from PyQt5.QtCore import QTimer
 from PyQt5.QtMultimedia import QCameraInfo
 from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox, QComboBox
 from PyQt5.QtGui import QPixmap, QImage
@@ -13,9 +13,7 @@ class UI_Window(QWidget):
 
     def __init__(self):
         super().__init__()
-        # print('UI')
         # Create a timer.
-        # self.thread = QThread()
         self.timer = QTimer()
         self.timer.timeout.connect(self.nextFrameSlot)
 
@@ -24,10 +22,6 @@ class UI_Window(QWidget):
 
         # Add a button
         self.button_layout = QHBoxLayout()
-
-        # btnCamera = QPushButton("Open camera")
-        # btnCamera.clicked.connect(self.start)
-        # button_layout.addWidget(btnCamera)
 
         self.cameras = []
         for i in QCameraInfo.availableCameras():
@@ -44,7 +38,6 @@ class UI_Window(QWidget):
         self.btnCamera2 = QPushButton("Stream")
         self.btnCamera2.clicked.connect(self.startStream)
         self.layout.addWidget(self.btnCamera2)
-        # layout.addLayout(button_layout)
 
         self.label1 = QLabel()
         self.label1.setText('')
@@ -64,7 +57,6 @@ class UI_Window(QWidget):
         self.cameraindx = 0
         self.camera = Camera(self.cameraindx)
         self.start()
-        # self.webserver = self.controller.runserver(self.camera)
 
     def selectedCamera(self):
         return self.cameraindx
@@ -80,21 +72,18 @@ class UI_Window(QWidget):
         else:
             self.btnCamera2.setEnabled(True)
 
-        self.timer.start(1000. / 24)
+        self.timer.start(60)
 
     def nextFrameSlot(self):
         frame = self.camera.read()
-        # frame = self.camera.read_gray()
         if frame is not None:
             image = QImage(frame, frame.shape[1], frame.shape[0], QImage.Format_RGB888)
             pixmap = QPixmap.fromImage(image)
             self.label.setPixmap(pixmap)
 
     def onCameraSelect(self, text):
-        # self.controller.stopstream()
         self.cameraindx = self.cameras.index(text)
         self.camera = Camera(self.cameraindx)
-        # self.webserver = WebServer(self.camera)
         self.start()
 
     def startStream(self):
@@ -103,6 +92,3 @@ class UI_Window(QWidget):
         self.webserver.start()
         self.camerasCombo.setDisabled(True)
         self.btnCamera2.setDisabled(True)
-
-        # self.webserver = self.controller.runserver(self.camera)
-        # self.webserver.start()

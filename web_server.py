@@ -17,7 +17,7 @@ class WebServer(QThread):
 
     def run(self):
         log(INFO, f"webserver started")
-        self.app.run(host=self.ip, port=8899)
+        self.app.run(host=self.ip, port=self.port)
 
     def getinfo(self):
         return f'http://{self.ip}:{self.port}'
