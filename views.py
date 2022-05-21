@@ -92,7 +92,11 @@ class UI_Window(QWidget):
         self.cameraview.clear()
         self.cameraview.setFixedSize(640, int(self.cameraheight))
         webserver = WebServer(self.camera)
-        self.streamlink.setText(f'Адрес трансляции: <a href="{webserver.getinfo()}">{webserver.getinfo()}</a>')
+        selectedcamera = self.cameras[self.cameraindx]
+        streamadrr = webserver.getinfo()
+        self.setWindowTitle(f"ИДЁТ ТРАНСЛЯЦИЯ {selectedcamera} по адресу: {streamadrr}")
+        message = f'Идёт трансляция <i>{selectedcamera}</i> по адресу: <a href="{streamadrr}">{streamadrr}</a>'
+        self.streamlink.setText(message)
         webserver.start()
         self.camerasCombo.setDisabled(True)
         self.streambutton.setDisabled(True)
