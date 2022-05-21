@@ -1,4 +1,5 @@
 import cv2
+import imutils as imutils
 
 
 class Camera:
@@ -6,17 +7,13 @@ class Camera:
     def __init__(self, camera):
         self.vc = cv2.VideoCapture(camera)
 
-    def open(self, width=640, height=480, fps=30):
-
-        # self.vc.set(1, fps)  #set FPS
-        # self.vc.set(3, width)  # set width
-        # self.vc.set(4, height)  # set height
-
+    def open(self):
         return self.vc.isOpened()
 
     def read(self, negative=False):
         if self.open():
             rval, frame = self.vc.read()
+            frame = imutils.resize(frame, width=640)
             if frame is not None:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 if negative:
