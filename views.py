@@ -35,7 +35,7 @@ class UI_Window(QWidget):
 
         self.layout.addLayout(self.button_layout)
 
-        self.streambutton = QPushButton("Stream")
+        self.streambutton = QPushButton("Начать трансляцию")
         self.streambutton.clicked.connect(self.startStream)
         self.layout.addWidget(self.streambutton)
 
@@ -64,7 +64,7 @@ class UI_Window(QWidget):
         if not self.camera.open():
             log(INFO, "Failed camera")
             msgBox = QMessageBox()
-            msgBox.setText("Failed to open camera.")
+            msgBox.setText("Ошибка при открытии камеры.")
             msgBox.exec_()
             self.streambutton.setDisabled(True)
             return
