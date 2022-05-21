@@ -14,7 +14,7 @@ class Camera:
 
     def read(self, negative=False):
         if self.open():
-            rval, frame = self.vc.read()
+            ret, frame = self.vc.read()
             frame = imutils.resize(frame, width=640)
             if frame is not None:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)

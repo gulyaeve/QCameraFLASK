@@ -11,6 +11,7 @@ logging.basicConfig(handlers=(logging.FileHandler('logs/log.txt'), logging.Strea
                     )
 
 if __name__ == '__main__':
+    logging.log(logging.INFO, "Приложение запущено")
     app = QApplication([])
 
     start_window = UI_Window()
