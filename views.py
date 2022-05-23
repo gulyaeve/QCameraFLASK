@@ -84,7 +84,8 @@ class UI_Window(QWidget):
         self.cameraindx = self.cameras.index(text)
         self.camera = Camera(self.cameraindx)
         self.cameraheight = self.camera.getheight()
-        self.cameraview.setFixedSize(640, int(self.cameraheight))
+        if self.cameraheight is not None:
+            self.cameraview.setFixedSize(640, int(self.cameraheight))
         self.start()
 
     def startStream(self):
