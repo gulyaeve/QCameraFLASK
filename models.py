@@ -1,4 +1,4 @@
-# from logging import log, INFO
+from logging import log, INFO
 
 import cv2
 import imutils as imutils
@@ -27,7 +27,7 @@ class Camera:
             ret, frame = self.vc.read()
             frame = imutils.resize(frame, width=640)
             frame_height = frame.shape[0]
-            # log(INFO, f"Frame height {frame_height}")
+            log(INFO, f"Frame height {frame_height}")
             return frame_height
 
     def __next__(self):

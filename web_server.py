@@ -1,4 +1,4 @@
-# from logging import log, INFO
+from logging import log, INFO
 
 import socket
 from PyQt5.QtCore import QThread
@@ -19,7 +19,7 @@ class WebServer(QThread):
         self.port = 8899
 
     def run(self):
-        # log(INFO, f"webserver started")
+        log(INFO, f"webserver started")
         self.app.run(host=self.ip, port=self.port)
 
     def getinfo(self):
