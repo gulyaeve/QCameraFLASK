@@ -62,7 +62,7 @@ class UI_Window(QWidget):
         # Set the layout
         self.setLayout(self.layout)
         self.setWindowTitle("NotVLC -- BETA")
-        # self.setFixedSize(800, 800)
+        self.setFixedSize(640, 640)
         self.cameraindx = 0
         self.camera = Camera(self.cameraindx)
         self.cameraheight = 480
