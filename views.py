@@ -63,7 +63,7 @@ class UI_Window(QWidget):
         # self.setFixedSize(800, 800)
         self.cameraindx = 0
         self.camera = Camera(self.cameraindx)
-        self.cameraheight = int(self.camera.getheight())
+        self.cameraheight = 480
         self.start()
 
     def selectedCamera(self):
@@ -101,11 +101,13 @@ class UI_Window(QWidget):
         self.timer.stop()
         self.cameraview.clear()
         self.cameraview.setFixedSize(640, int(self.cameraheight))
-        webserver = WebServer(self.camera)
+        self.password = self.sendPassword()
+        webserver = WebServer(self.camera, self.password)
         selectedcamera = self.cameras[self.cameraindx]
         streamadrr = webserver.getinfo()
         self.setWindowTitle(f"ИДЁТ ТРАНСЛЯЦИЯ {selectedcamera} по адресу: {streamadrr}")
-        message = f'Идёт трансляция <i>{selectedcamera}</i> по адресу: <a href="{streamadrr}">{streamadrr}</a>'
+        message = f'Идёт трансляция <i>{selectedcamera}</i> по адресу: ' \
+                  f'<a href="{streamadrr}/admin:{self.password}">{streamadrr}/admin:{self.password}</a>'
         self.streamlink.setText(message)
         webserver.start()
         self.camerasCombo.setDisabled(True)
@@ -113,4 +115,4 @@ class UI_Window(QWidget):
 
     def sendPassword(self):
         self.passwordText = self.passwordEdit.text()
-        print('Your password: ' + self.passwordText)
+        return self.passwordText

@@ -7,7 +7,7 @@ import imutils as imutils
 class Camera:
 
     def __init__(self, camera):
-        self.vc = cv2.VideoCapture(camera)
+        self.vc = cv2.VideoCapture(camera, cv2.CAP_ANY)
 
     def open(self):
         return self.vc.isOpened()

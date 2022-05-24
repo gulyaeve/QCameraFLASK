@@ -6,12 +6,13 @@ from flask import Flask, Response
 
 
 class WebServer(QThread):
-    def __init__(self, camera):
+    def __init__(self, camera, password):
         super().__init__()
         self.camera = camera
+        self.password = password
 
         self.app = Flask(__name__)
-        self.app.add_url_rule('/', endpoint=None, view_func=self.stream)
+        self.app.add_url_rule(f'/admin:{self.password}', endpoint=None, view_func=self.stream)
 
         hostname = socket.gethostname()
         self.ip = socket.gethostbyname(hostname)
