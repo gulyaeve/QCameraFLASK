@@ -2,7 +2,7 @@ from logging import log, INFO
 
 from PyQt5.QtCore import QTimer
 from PyQt5.QtMultimedia import QCameraInfo
-from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox, QComboBox
+from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox, QComboBox, QLineEdit
 from PyQt5.QtGui import QPixmap, QImage
 
 from models import Camera
@@ -22,6 +22,7 @@ class UI_Window(QWidget):
 
         # Add a button
         self.button_layout = QHBoxLayout()
+        self.password_layout = QHBoxLayout()
 
         self.cameras = []
         for i in QCameraInfo.availableCameras():
@@ -33,7 +34,15 @@ class UI_Window(QWidget):
         self.camerasCombo.activated[str].connect(self.start)
         self.button_layout.addWidget(self.camerasCombo)
 
+        self.passwordEdit = QLineEdit()
+        self.passwordEdit.setEchoMode(QLineEdit.Password)
+        self.send = QPushButton('Ввести пароль')
+        self.send.clicked.connect(self.sendPassword)
+        self.password_layout.addWidget(self.passwordEdit)
+        self.password_layout.addWidget(self.send)
+
         self.layout.addLayout(self.button_layout)
+        self.layout.addLayout(self.password_layout)
 
         self.streambutton = QPushButton("Начать трансляцию")
         self.streambutton.clicked.connect(self.startStream)
@@ -101,3 +110,7 @@ class UI_Window(QWidget):
         webserver.start()
         self.camerasCombo.setDisabled(True)
         self.streambutton.setDisabled(True)
+
+    def sendPassword(self):
+        self.passwordText = self.passwordEdit.text()
+        print('Your password: ' + self.passwordText)
