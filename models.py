@@ -40,3 +40,4 @@ class Camera:
                     yield (b'--frame\r\n'
                            b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
+# TODO: add timer to delay fps

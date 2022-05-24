@@ -20,6 +20,8 @@ class UI_Window(QWidget):
         # Create a layout.
         self.layout = QVBoxLayout()
 
+        self.version = '0.1.1'
+
         self.isPasswordEntered = False
         # Add a button
         self.button_layout = QHBoxLayout()
@@ -61,7 +63,7 @@ class UI_Window(QWidget):
 
         # Set the layout
         self.setLayout(self.layout)
-        self.setWindowTitle("NotVLC -- BETA")
+        self.setWindowTitle("NotVLC -- BETA ver. " + self.version)
         self.setFixedSize(640, 640)
         self.cameraindx = 0
         self.camera = Camera(self.cameraindx)
@@ -125,3 +127,5 @@ class UI_Window(QWidget):
             self.isPasswordEntered = False
             self.streambutton.setDisabled(True)
         return self.passwordText
+
+# TODO: add field to enter port
