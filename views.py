@@ -20,6 +20,7 @@ class UI_Window(QWidget):
         # Create a layout.
         self.layout = QVBoxLayout()
 
+        self.isPasswordEntered = False
         # Add a button
         self.button_layout = QHBoxLayout()
         self.password_layout = QHBoxLayout()
@@ -47,6 +48,7 @@ class UI_Window(QWidget):
         self.streambutton = QPushButton("Начать трансляцию")
         self.streambutton.clicked.connect(self.startStream)
         self.layout.addWidget(self.streambutton)
+        self.streambutton.setDisabled(True)
 
         self.streamlink = QLabel()
         self.streamlink.setText('')
@@ -78,7 +80,8 @@ class UI_Window(QWidget):
             self.streambutton.setDisabled(True)
             return
         else:
-            self.streambutton.setEnabled(True)
+            if self.isPasswordEntered:
+                self.streambutton.setEnabled(True)
 
         self.timer.start(60)
 
@@ -115,4 +118,10 @@ class UI_Window(QWidget):
 
     def sendPassword(self):
         self.passwordText = self.passwordEdit.text()
+        if self.passwordText != '':
+            self.isPasswordEntered = True
+            self.streambutton.setEnabled(True)
+        else:
+            self.isPasswordEntered = False
+            self.streambutton.setDisabled(True)
         return self.passwordText
