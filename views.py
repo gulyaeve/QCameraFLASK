@@ -1,4 +1,4 @@
-from logging import log, INFO
+# from logging import log, INFO
 
 from PyQt5.QtCore import QTimer
 from PyQt5.QtMultimedia import QCameraInfo
@@ -71,7 +71,7 @@ class UI_Window(QWidget):
 
     def start(self):
         if not self.camera.open():
-            log(INFO, "Failed camera")
+            # log(INFO, "Failed camera")
             msgBox = QMessageBox()
             msgBox.setText("Ошибка при открытии камеры.")
             msgBox.exec_()
