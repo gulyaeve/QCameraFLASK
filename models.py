@@ -2,7 +2,7 @@ from logging import log, INFO
 
 import cv2
 import imutils as imutils
-
+from PyQt5 import QtTest
 
 class Camera:
 
@@ -33,6 +33,7 @@ class Camera:
     def __next__(self):
         if self.open():
             while True:
+                QtTest.QTest.qWait(100)
                 ret, frame = self.vc.read()
                 frame = imutils.resize(frame, width=640)
                 if ret:
