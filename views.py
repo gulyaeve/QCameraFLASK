@@ -111,7 +111,7 @@ class UI_Window(QWidget):
         selectedcamera = self.cameras[self.cameraindx]
         streamadrr = webserver.getinfo()
         self.setWindowTitle(f"<<ИДЁТ ТРАНСЛЯЦИЯ>>")
-        message = f'Идёт трансляция <i>{selectedcamera}</i> по адресу: ' \
+        message = f'Идёт трансляция <i>{selectedcamera}</i> по адресу: <br />' \
                   f'<a href="{streamadrr}/admin:{self.password}">{streamadrr}/admin:{self.password}</a>'
         self.streamlink.setText(message)
         webserver.start()
