@@ -1,5 +1,6 @@
 from logging import log, INFO
 
+from PyQt5 import QtGui
 from PyQt5.QtCore import QTimer
 from PyQt5.QtMultimedia import QCameraInfo
 from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox, QComboBox, QLineEdit
@@ -65,6 +66,7 @@ class UI_Window(QWidget):
         self.setLayout(self.layout)
         self.setWindowTitle("NotVLC -- BETA ver. " + self.version)
         self.setFixedSize(640, 640)
+        self.setWindowIcon(QtGui.QIcon('4.png'))
         self.cameraindx = 0
         self.camera = Camera(self.cameraindx)
         self.cameraheight = 480
