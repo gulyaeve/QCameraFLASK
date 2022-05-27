@@ -5,7 +5,6 @@ import imutils as imutils
 from PyQt5 import QtTest
 
 class Camera:
-
     def __init__(self, camera):
         self.vc = cv2.VideoCapture(camera, cv2.CAP_ANY)
 
