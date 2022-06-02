@@ -3,6 +3,8 @@ from logging import log, INFO
 import cv2
 import imutils as imutils
 from PyQt5 import QtTest
+from PyQt5.QtCore import QBuffer, QIODevice
+from PyQt5.QtWidgets import QWidget
 
 class Camera:
     def __init__(self, camera):
@@ -35,6 +37,11 @@ class Camera:
                 QtTest.QTest.qWait(100)
                 ret, frame = self.vc.read()
                 frame = imutils.resize(frame, width=640)
+                buffer = QBuffer()
+                buffer.open(QIODevice.ReadWrite)
+                # pic = QWidget.grab()
+                # pic.save(buffer, 'jpg')
+                # print(buffer, pic)
                 if ret:
                     ret, buffer = cv2.imencode(".jpg", frame)
                     yield (b'--frame\r\n'
